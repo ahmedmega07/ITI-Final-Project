@@ -1,0 +1,23 @@
+﻿@model List<Student>
+@{
+  
+    ViewData["Title"] = "Index";
+}
+
+<a href="/Student/New" class="btn" style="background-color: orange; border-color: black; color: black; font-weight: bold;">Registration for the department</a>
+<table class="table table-bordered">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Department.Name</td>
+            <td><a href="@Url.Action("Details", "Student", new { id = item.Id })" class="btn btn-sm text-dark fw-bold" style="background-color: darkorange;">Details</a></td>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <td><a href="@Url.Action("Edit", "Student", new { id = item.Id })" class="btn btn-sm text-dark fw-bold" style="background-color: darkorange;">Edit</a></td>
+                <td><a href="@Url.Action("Delete", "Student", new { id = item.Id })" class="btn btn-sm text-dark fw-bold" style="background-color: darkorange;">Delete</a></td>
+            }
+        </tr>
+    }
+</table>

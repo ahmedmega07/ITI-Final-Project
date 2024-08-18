@@ -1,0 +1,12 @@
+﻿@model Student
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+
+<partial name="_StudentCard" model="Model" />
+   @if (User.IsInRole("Admin")){
+    <a asp-action="Edit" asp-controller="Student" asp-route-id="@Model.Id" style="color: darkorange;">Edit</a>
+}

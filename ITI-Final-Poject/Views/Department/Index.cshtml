@@ -1,0 +1,66 @@
+﻿@model List<Department>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Index";
+    SelectList DeptList = new SelectList(Model, "Id", "Name");
+}
+   @if (User.IsInRole("Admin")){
+    <a href="/Department/New" class="btn" style="background-color: orange; border-color: black; color: black; font-weight: bold;">New Department</a>
+
+}
+<br />
+<select name="Dept" id="Dept" class="form-control" asp-items="DeptList" onchange="GetStudentsData()">
+    <option value="0">--Select Department--</option>
+</select>
+<ul id="StdData"></ul>
+<hr />
+<br />
+<br />
+<table class="table table-borderd table-hover">
+    <tr>
+     
+        <th>Name</th>
+        <th>Manager</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+           
+            <td>@item.Name</td>
+            <td>@item.ManagerName</td>
+            <td><a href="@Url.Action("Details", "Department", new { id = item.Id })" class="btn btn-sm text-dark fw-bold" style="background-color: darkorange;">Details</a></td>
+            @if (User.IsInRole("Admin"))
+            {
+                <td><a href="@Url.Action("Delete", "Department", new { id = item.Id })
+                    " class="btn btn-sm text-dark fw-bold" style="background-color: darkorange;">Delete</a></td>
+            }
+        </tr>
+    }
+</table>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    function GetStudentsData() {
+        var deptId = document.getElementById("Dept").value;
+        $.ajax(
+            {
+                url: "/Department/GetStudent",
+                data: { "DeptID": deptId },
+                success: function (result) {
+                    console.log(result);
+                    document.getElementById("StdData").innerHTML = "";
+                    for (let std of result) {
+                        document.getElementById("StdData").innerHTML +=
+                            "<li>" + std.name + "</li>";
+                    }
+                }
+            }
+        );
+    }
+
+</script>
